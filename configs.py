@@ -20,6 +20,6 @@ CHUNK_SIZE = 1024
 
 NOT_RECOGNIZED = "Not recognized!"
 
-BASE_DIR = os.path.abspath('')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 LOGGING_FILE = os.path.join(BASE_DIR, 'debug.log')
