@@ -1,3 +1,5 @@
+import os
+
 SOCKET_SERVER = "127.0.0.1"  # Server ip-address
 SOCKET_PORT = 8000  # Server Port
 SOCKET_URL = "ws://{0}/ws/openface-stream/".format(SOCKET_SERVER).format(":").format(SOCKET_PORT)
@@ -12,6 +14,12 @@ SEND_ONCE_IN_TIME = 1  # in seconds
 
 WAIT_AFTER_SUCCESS = 10  # in seconds
 
+SLEEP_FOR_NEW_TRY_CONNECTION = 3  # in seconds
+
 CHUNK_SIZE = 1024
 
 NOT_RECOGNIZED = "Not recognized!"
+
+BASE_DIR = os.path.abspath('')
+
+LOGGING_FILE = os.path.join(BASE_DIR, 'debug.log')

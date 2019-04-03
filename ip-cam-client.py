@@ -3,6 +3,7 @@ import time
 import base64
 import datetime
 import logging
+import urllib3
 import requests
 import threading
 from autobahn.twisted.websocket import WebSocketClientProtocol, WebSocketClientFactory
@@ -10,7 +11,7 @@ from twisted.internet.protocol import ReconnectingClientFactory
 import configs
 
 logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
-                    filename='debug.log', level=logging.DEBUG)
+                    filename=configs.LOGGING_FILE, level=logging.DEBUG)
 
 
 class StreamConnection:
@@ -31,7 +32,12 @@ class StreamConnection:
         return cls.is_send_once_in_time(temp_now, prev_now) and cls.is_enough_waited_after_success(temp_now)
 
     def run(self, socket_protocol, ip_cam_url=configs.IP_CAM_URL, username=configs.USERNAME, password=configs.PASSWORD):
-        r = requests.get(ip_cam_url, auth=(username, password), stream=True)
+        try:
+            r = requests.get(ip_cam_url, auth=(username, password), stream=True)
+        except urllib3.exceptions.HeaderParsingError as e:
+            logging.info("Exception with connection to camera: {}".format(e))
+            time.sleep(configs.SLEEP_FOR_NEW_TRY_CONNECTION)
+            self.run(socket_protocol, ip_cam_url, username, password)
         now_ = datetime.datetime.now().timestamp()
         if (r.status_code == 200):
             bytes_ = bytes()
