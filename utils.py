@@ -69,7 +69,7 @@ def use_mjpg_con(socket_protocol, ip_cam_url=configs.MJPG_IP_CAM_URL,
                     bytes_ = bytes_[b + 2:]
                     new_now = send_img(image, now_, socket_protocol)
                     now_ = new_now if new_now else now_
-    except urllib3.exceptions.HeaderParsingError as e:
+    except (urllib3.exceptions.HeaderParsingError, requests.exceptions.ConnectionError) as e:
         logging.info("Exception with connection to camera: {}".format(e))
         time.sleep(configs.SLEEP_FOR_NEW_TRY_CONNECTION)
         use_mjpg_con(socket_protocol, ip_cam_url, username, password)
