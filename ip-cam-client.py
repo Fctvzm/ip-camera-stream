@@ -13,11 +13,18 @@ logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S
 
 
 class StreamConnection:
-    def run(self, socket_protocol, ip_cam_url=configs.IP_CAM_URL, username=configs.USERNAME, password=configs.PASSWORD):
-        if configs.PROTOCOL_USED == configs.PROTOCOLS[0]:
-            utils.use_rtsp_con(socket_protocol, ip_cam_url)
-        elif configs.PROTOCOL_USED == configs.PROTOCOLS[1]:
-            utils.use_mjpeg_con(socket_protocol, ip_cam_url, username, password)
+    def run(self, socket_protocol):
+        if 'rtsp' in configs.PROTOCOL_USED:
+            # RTSP protocol
+            thread = threading.Thread(target=utils.use_rtsp_con, args=(socket_protocol, configs.RTSP_IP_CAM_URL))
+            thread.daemon = True  # Daemonize thread
+            thread.start()
+        if 'mjpg' in configs.PROTOCOL_USED:
+            # HTTP with mjpg format
+            thread = threading.Thread(target=utils.use_mjpg_con, args=(socket_protocol, configs.MJPG_IP_CAM_URL,
+                                                                       configs.MJPG_USERNAME, configs.MJPG_PASSWORD))
+            thread.daemon = True  # Daemonize thread
+            thread.start()
 
 
 class AppProtocol(WebSocketClientProtocol):

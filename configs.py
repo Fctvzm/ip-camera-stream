@@ -5,18 +5,15 @@ SOCKET_PORT = 8000  # Server Port
 SOCKET_URL = "ws://{0}/ws/openface-stream/".format(SOCKET_SERVER).format(":").format(SOCKET_PORT)
 
 PROTOCOLS = ['rtsp', 'mjpg']
-PROTOCOL_USED = PROTOCOLS[0]
+PROTOCOL_USED = PROTOCOLS
 
-if PROTOCOL_USED == PROTOCOLS[0]:
-    # rtsp://admin:AVdev0021@192.168.1.64:554
-    USERNAME, PASSWORD = "admin", "AVdev0021"
-    IP_CAM_URL = "rtsp://{}:{}@192.168.1.64:554".format(USERNAME, PASSWORD)
-else:
-    # http://admin:admin@192.168.1.101/video.mjpg?mute
-    IP_CAM_URL = "http://192.168.1.101/video.mjpg?mute"
-    USERNAME, PASSWORD = "admin", "admin"
+# rtsp://admin:AVdev0021@192.168.1.64:554
+RTSP_USERNAME, RTSP_PASSWORD = "admin", "AVdev0021"
+RTSP_IP_CAM_URL = "rtsp://{}:{}@192.168.1.64:554".format(RTSP_USERNAME, RTSP_PASSWORD)
 
-RTSP_DROP_FRAME_LIMIT = 10
+# http://admin:admin@192.168.1.101/video.mjpg?mute
+MJPG_IP_CAM_URL = "http://192.168.1.101/video.mjpg?mute"
+MJPG_USERNAME, MJPG_PASSWORD = "admin", "admin"
 
 SLEEP_SECONDS = 0  # in seconds
 SEND_ONCE_IN_TIME = 1  # in seconds

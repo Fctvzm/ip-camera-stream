@@ -40,7 +40,7 @@ def send_img(image, prev_now, socket_protocol):
         return datetime.datetime.now().timestamp()
 
 
-def use_rtsp_con(socket_protocol, ip_cam_url=configs.IP_CAM_URL):
+def use_rtsp_con(socket_protocol, ip_cam_url=configs.RTSP_IP_CAM_URL):
     client = rtsp.Client(ip_cam_url)._capture
     image = client.read()
     now_ = datetime.datetime.now().timestamp()
@@ -53,7 +53,8 @@ def use_rtsp_con(socket_protocol, ip_cam_url=configs.IP_CAM_URL):
         image = client.read()
 
 
-def use_mjpeg_con(socket_protocol, ip_cam_url=configs.IP_CAM_URL, username=configs.USERNAME, password=configs.PASSWORD):
+def use_mjpg_con(socket_protocol, ip_cam_url=configs.MJPG_IP_CAM_URL,
+                 username=configs.MJPG_USERNAME, password=configs.MJPG_PASSWORD):
     try:
         r = requests.get(ip_cam_url, auth=(username, password), stream=True)
         now_ = datetime.datetime.now().timestamp()
@@ -71,6 +72,6 @@ def use_mjpeg_con(socket_protocol, ip_cam_url=configs.IP_CAM_URL, username=confi
     except urllib3.exceptions.HeaderParsingError as e:
         logging.info("Exception with connection to camera: {}".format(e))
         time.sleep(configs.SLEEP_FOR_NEW_TRY_CONNECTION)
-        use_mjpeg_con(socket_protocol, ip_cam_url, username, password)
+        use_mjpg_con(socket_protocol, ip_cam_url, username, password)
     else:
         logging.info("Received unexpected status code {}".format(r.status_code))
