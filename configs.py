@@ -1,6 +1,6 @@
 import os
 
-SOCKET_SERVER = "127.0.0.1"  # Server ip-address
+SOCKET_SERVER = "192.168.1.105"  # Server ip-address
 SOCKET_PORT = 8000  # Server Port
 SOCKET_URL = "ws://{0}/ws/openface-stream/".format(SOCKET_SERVER).format(":").format(SOCKET_PORT)
 
@@ -18,7 +18,7 @@ MJPG_USERNAME, MJPG_PASSWORD = "admin", "admin"
 SLEEP_SECONDS = 0  # in seconds
 SEND_ONCE_IN_TIME = 1  # in seconds
 
-WAIT_AFTER_SUCCESS = 10  # in seconds
+WAIT_AFTER_SUCCESS = 15  # in seconds
 
 SLEEP_FOR_NEW_TRY_CONNECTION = 3  # in seconds
 
