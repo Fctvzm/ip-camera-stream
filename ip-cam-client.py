@@ -1,6 +1,5 @@
 import json
 import logging
-import datetime
 import threading
 from autobahn.twisted.websocket import WebSocketClientProtocol, WebSocketClientFactory
 from twisted.internet.protocol import ReconnectingClientFactory
@@ -14,17 +13,10 @@ logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S
 
 class StreamConnection:
     def run(self, socket_protocol):
-        if 'rtsp' in configs.PROTOCOL_USED:
-            # RTSP protocol
-            thread = threading.Thread(target=utils.use_rtsp_con, args=(socket_protocol, configs.RTSP_IP_CAM_URL))
-            thread.daemon = True  # Daemonize thread
-            thread.start()
-        if 'mjpg' in configs.PROTOCOL_USED:
-            # HTTP with mjpg format
-            thread = threading.Thread(target=utils.use_mjpg_con, args=(socket_protocol, configs.MJPG_IP_CAM_URL,
-                                                                       configs.MJPG_USERNAME, configs.MJPG_PASSWORD))
-            thread.daemon = True  # Daemonize thread
-            thread.start()
+        thread = threading.Thread(target=utils.use_mjpg_con, args=(socket_protocol, configs.MJPG_IP_CAM_URL,
+                                                                   configs.MJPG_USERNAME, configs.MJPG_PASSWORD))
+        thread.daemon = True  # Daemonize thread
+        thread.start()
 
 
 class AppProtocol(WebSocketClientProtocol):
@@ -49,9 +41,6 @@ class AppProtocol(WebSocketClientProtocol):
             data = payload.decode('utf8')
             msg_data = json.loads(data)
             if msg_data['type'] == 'RECOGNIZED' and msg_data['name'] != configs.NOT_RECOGNIZED:
-                temp_now = datetime.datetime.now().timestamp()
-                if utils.is_enough_waited_after_success(temp_now):
-                    utils.last_rec_timestamp = datetime.datetime.now().timestamp()
                 logging.info("Got Text message from the server {0}".format(data))
 
     def onClose(self, wasClean, code, reason):
