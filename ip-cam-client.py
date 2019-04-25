@@ -26,10 +26,7 @@ class AppProtocol(WebSocketClientProtocol):
         self.factory.resetDelay()
 
         stream_conn = StreamConnection()
-
-        thread = threading.Thread(target=stream_conn.run, args=(self,))
-        thread.daemon = True  # Daemonize thread
-        thread.start()
+        stream_conn.run(self)
 
     def onOpen(self):
         logging.info("Connection is open.")
